@@ -309,6 +309,10 @@ class FalkonryService:
             options['format'] = None
 
         url = '/assessment/' + str(assessment) + '/output'
+
+        if 'offset' in options:
+            url += '?offset=' + str(options['offset'])
+
         response = self.http.downstream(url, responseFormat)
         stream = sseclient.SSEClient(response)
         return stream

@@ -26,6 +26,23 @@ class TestAssessmentGetOutput(unittest.TestCase):
             print(exception_handler(e))
             self.assertEqual(0, 1, 'Error getting output of a Assessment')
 
+    @unittest.skip("streaming can only be done once ")
+    def test_get_assessment_output_with_offset(self):
+        fclient = FClient(host=host, token=token,options=None)
+        try:
+            stream = fclient.get_output(assessment, {"offset": 10})
+
+            receivedOutput = False
+            for event in stream.events():
+                self.assertEqual(json.loads(event.data)['offset'] >= 10, True)
+                print(json.dumps(json.loads(event.data)))
+                receivedOutput = True
+            self.assertEquals(receivedOutput, True)
+        except Exception as e:
+            print(exception_handler(e))
+            self.assertEqual(0, 1, 'Error getting output of a Assessment')
+
+
     def test_get_assessment_historical_output(self):
         fclient = FClient(host=host, token=token,options=None)
         try:
