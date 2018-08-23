@@ -35,7 +35,7 @@ class TestAssessmentGetOutput(unittest.TestCase):
         With every falkonry output event there will be an offset sent, use this offset to continue listening
         the output from where you left.
     '''
-    #@unittest.skip("streaming can only be done once ")
+    @unittest.skip("streaming can only be done once ")
     def test_get_assessment_output_with_offset(self):
         fclient = FClient(host=host, token=token,options=None)
 
