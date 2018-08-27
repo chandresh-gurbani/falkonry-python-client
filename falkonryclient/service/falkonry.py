@@ -302,6 +302,7 @@ class FalkonryService:
         """
         To get output of a Assessment
         :param assessment: string
+        :param options: dict
         """
         responseFormat=None
         if options and 'format' in options and options['format'] is not None:
