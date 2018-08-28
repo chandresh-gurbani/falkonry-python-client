@@ -1,5 +1,8 @@
 # Release Log
 
+### 2.2.1
+* Support for offset in live monitoring Refer to release note - https://github.com/Falkonry/falkonry-python-client/releases/tag/2.2.1
+
 ### 2.2.0
 * Support for turn on/off live monitoring for a specific assessment. Refer to release note - https://github.com/Falkonry/falkonry-python-client/releases/tag/2.2.0
 

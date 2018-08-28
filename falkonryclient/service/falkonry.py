@@ -302,6 +302,7 @@ class FalkonryService:
         """
         To get output of a Assessment
         :param assessment: string
+        :param options: dict
         """
         responseFormat=None
         if options and 'format' in options and options['format'] is not None:
@@ -309,6 +310,10 @@ class FalkonryService:
             options['format'] = None
 
         url = '/assessment/' + str(assessment) + '/output'
+
+        if 'offset' in options:
+            url += '?offset=' + str(options['offset'])
+
         response = self.http.downstream(url, responseFormat)
         stream = sseclient.SSEClient(response)
         return stream

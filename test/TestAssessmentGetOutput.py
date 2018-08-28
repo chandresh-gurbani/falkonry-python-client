@@ -8,6 +8,7 @@ token      = os.environ['FALKONRY_TOKEN']                  # auth token
 assessment = os.environ['FALKONRY_ASSESSMENT_SLIDING_ID']  # assessment id
 
 
+
 class TestAssessmentGetOutput(unittest.TestCase):
 
     def setUp(self):
@@ -25,6 +26,42 @@ class TestAssessmentGetOutput(unittest.TestCase):
         except Exception as e:
             print(exception_handler(e))
             self.assertEqual(0, 1, 'Error getting output of a Assessment')
+
+
+    ''' 
+        This test case is to demonstrate how to fetch the output of an assessment from the previous offset.
+        You can use this method if your output stream was broken/disconnected and 
+        you have missed the output events during that time.
+        With every falkonry output event there will be an offset sent, use this offset to continue listening
+        the output from where you left.
+    '''
+    @unittest.skip("streaming can only be done once ")
+    def test_get_assessment_output_with_offset(self):
+        fclient = FClient(host=host, token=token,options=None)
+
+        try:
+            stream = fclient.get_output(assessment, {})
+            lastOffset = 0
+            for event in stream.events():
+                print(json.dumps(json.loads(event.data)))
+                lastOffset = json.loads(event.data)['offset'] # keep track of offset sent in falkonry output event
+
+        except Exception as e:
+            print(exception_handler(e))
+            ''' Assuming there was some exception occured and you want to listen the output again 
+            then use the offset value and set it in the options parameter. 
+            '''
+            # assuming last offset was 10
+            options = {"offset": lastOffset}
+            try:
+                stream = fclient.get_output(assessment, options)
+                for event in stream.events():
+                    self.assertEqual(json.loads(event.data)['offset'] >= lastOffset, True)
+                    print(json.dumps(json.loads(event.data)))
+            except Exception as e:
+                print(exception_handler(e))
+                self.assertEqual(0, 1, 'Error getting output of a Assessment')
+
 
     def test_get_assessment_historical_output(self):
         fclient = FClient(host=host, token=token,options=None)
